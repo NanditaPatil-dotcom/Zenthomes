@@ -55,7 +55,7 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 ## 🧙‍♀️ Author
 
 **Nandita Patil**  
-Engineering student | Coder | Artist  
+Engineering student | Coder  
 GitHub: [@NanditaPatil-dotcom](https://github.com/NanditaPatil-dotcom)
 
 ---
