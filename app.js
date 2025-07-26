@@ -1,10 +1,28 @@
+if(process.env.NODE_ENV != "production"){
+   require('dotenv').config();
+}
+
+
 const express=require("express");
 const app=express();
 const mongoose=require("mongoose");
-const Listing=require("./models/listing.js");
 const path=require("path");
 const methodOverride=require("method-override");
 const ejsmate=require("ejs-mate");
+const ExpressError=require("./utils/ExpressError.js");
+const session = require("express-session");
+const MongoStore=require("connect-mongo");
+const flash = require("connect-flash");
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
+const User=require("./models/user.js");
+
+
+const listingRouter=require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter=require("./routes/user.js");
+
+const DBurl=process.env.MONGO_URL;
 
 main().then(()=>{
     console.log("connected to database");
@@ -14,7 +32,7 @@ main().then(()=>{
 });
 
 async function main(){
-    await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+    await mongoose.connect(DBurl);
 }
 
 app.set("view engine","ejs");
@@ -24,61 +42,70 @@ app.use(methodOverride("_method"));
 app.engine('ejs',ejsmate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-
-app.get("/",(req,res)=>{
-    res.send("working");
+const store=MongoStore.create({
+  mongoUrl: DBurl,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 86400
 });
 
-//index route
-app.get("/listings",async(req,res)=>{
-   const allListings= await Listing.find({});
-   res.render("listings/index.ejs",{allListings}); //rendering index.ejs and passing alllistings into ejs
+store.on("error",()=>{
+  console.log("ERROR IN MONGO SESSION",err);
 });
 
-//new route
-app.get("/listings/new",(req,res)=>{
-    res.render("listings/new.ejs");
+const sessionOptions = {
+  store,
+  secret: process.env.SECRET, 
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use(passport.initialize()); 
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser()); //storing the persons login 
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success");
+  res.locals.error=req.flash("error");
+  res.locals.currUser=req.user;
+  res.locals.mapToken = process.env.MAP_TOKEN;
+  next();
 });
 
-//show route
-app.get("/listings/:id",async(req,res)=>{
-    let {id}=req.params;
-    const listing=await Listing.findById(id);
-    res.render("listings/show.ejs",{listing});
+app.use((req, res, next) => {
+  console.log("Incoming request:", req.method, req.url);
+  next();
 });
 
-//create route
-app.post("/listings", async(req,res)=>{
-    const listingData=req.body.listing;
-    listingData.image={
-        filename:`listing_${Date.now()}`,
-        url:listingData.image
-    };
-    const newListing=new Listing(listingData);
-    await newListing.save();
-    res.redirect("/listings");
+app.use("/listings",listingRouter);
+app.use("/listings/:id/reviews",reviewRouter);
+app.use("/",userRouter);
+
+
+app.use((req, res, next) => {
+  next(new ExpressError(404, "Page not found"));
 });
 
-//edit route
-app.get("/listings/:id/edit",async(req,res)=>{
-    let {id}=req.params;
-    const listing=await Listing.findById(id);
-    res.render("listings/edit.ejs",{listing});
+
+app.use((err, req, res, next) => {
+  console.log("ERROR:", err);
+  const { statusCode = 500, message = "Something went wrong!" } = err;
+  res.status(statusCode).render("error.ejs",{message});
+  //res.status(statusCode).send(message);
 });
 
-//update route
-app.put("/listings/:id", async (req, res) => {
-    const { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    res.redirect(`/listings/${id}`);
-});
-
-//delete route
-app.delete("/listings/:id",async(req,res)=>{
-    let {id}=req.params;
-    let deletedListing=await Listing.findOneAndDelete(id);
-    res.redirect("/listings");
-})
 
 app.listen(8080,()=>{
     console.log("working");
