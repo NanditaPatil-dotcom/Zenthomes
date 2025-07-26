@@ -32,7 +32,7 @@ module.exports.listingUpdateSchema = Joi.object({
     image: Joi.object({
       url: Joi.string(),
       filename: Joi.string()
-    }).optional()  // optional editing
+    }).optional()  
   }).required()
 });
 
