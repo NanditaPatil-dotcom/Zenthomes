@@ -1,0 +1,145 @@
+<style>
+.search-btn {
+    background-color: red;
+    color: #fff ;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;
+  }
+  .search-btn:hover{
+    background-color: red;
+    color: #fff ;
+  }
+  .search-btn i{
+    display: inline;
+    margin-right: 0.5rem;
+  }
+
+  .search-inp{
+    border-radius: 25px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+    font-size: 1rem;
+    width: 500px;
+  }
+
+
+  .suggestions-box {
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  right: 0;
+  z-index: 1000; 
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.suggestions-box li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.suggestions-box li:hover {
+  background-color: #f0f0f0;
+}
+#suggestions:empty {
+  display: none;
+}
+</style>
+
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-map-location-dot"></i></a>
+    <button class="navbar-toggler" 
+    type="button" 
+    data-bs-toggle="collapse" 
+    data-bs-target="#navbarNavAltMarkup" 
+>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+
+<!--Search bar-->
+ <div class="navbar-nav ms-auto position-relative" style="width:max-content;">
+  <form class="d-flex" action="/listings" method="GET" autocomplete="off">
+    <input 
+      class="form-control me-2 search-inp" 
+      type="search" 
+      placeholder="Search destinations"
+      name="search"
+      id="searchInput"
+      value="<%= typeof search !== 'undefined' ? search : '' %>"
+    />
+    <button class="btn search-btn" type="submit">
+      <i class="fa-solid fa-magnifying-glass"></i></button>
+  </form>
+
+  <ul 
+  id="suggestions" 
+  class="list-group suggestions-box position-absolute w-100 mt-1"></ul>
+</div>
+
+
+<script>
+  const searchInput = document.getElementById("searchInput");
+  const suggestionsBox = document.getElementById("suggestions");
+
+  searchInput.addEventListener("input", async () => {
+    const query = searchInput.value.trim();
+
+    if (!query) {
+      suggestionsBox.innerHTML = "";
+      return;
+    }
+
+    try {
+      const res = await fetch(`/listings/search/suggestions?q=${query}`);
+      const suggestions = await res.json();
+
+      suggestionsBox.innerHTML = "";
+
+      suggestions.forEach(title => {
+        const li = document.createElement("li");
+        li.classList.add("list-group-item", "list-group-item-action");
+        li.textContent = title;
+
+        li.addEventListener("click", () => {
+          searchInput.value = title;
+          suggestionsBox.innerHTML = "";
+        });
+
+        suggestionsBox.appendChild(li);
+      });
+    } catch (err) {
+      console.error("Autocomplete fetch error:", err);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
+      suggestionsBox.innerHTML = "";
+    }
+  });
+</script>
+
+
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/listings/new">Add new listing</a>
+        <% if(!currUser) { %>
+        <a class="nav-link" href="/signup"><b>Sign up</b></a>
+        <a class="nav-link" href="/login"><b>Log in</b></a>
+        <% } %>
+        <% if(currUser) { %>
+        <a class="nav-link" href="/logout"><b>Log out</b></a>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</nav>
