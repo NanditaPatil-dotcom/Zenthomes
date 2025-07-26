@@ -89,6 +89,33 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/", (req, res) => {
+  res.send("Welcome to Zenthomes!");
+});
+
+app.use("/listings",listingRouter);
+app.use("/listings/:id/reviews",reviewRouter);
+app.use("/",userRouter);
+
+
+
+app.use((req, res, next) => {
+  next(new ExpressError(404, "Page not found"));
+});
+
+
+app.use((err, req, res, next) => {
+  console.log("ERROR:", err);
+  const { statusCode = 500, message = "Something went wrong!" } = err;
+  res.status(statusCode).render("error.ejs",{message});
+  //res.status(statusCode).send(message);
+});
+
+app.use((req, res, next) => {
+  console.log("Incoming request:", req.method, req.url);
+  next();
+});
+
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
