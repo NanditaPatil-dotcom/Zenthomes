@@ -17,7 +17,7 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 
 ## 💡 What I Learned
 
-- Integrating third-party APIs like Mapbox & Cloudinary
+- Integrating third-party APIs like Maptiler & Cloudinary
 - RESTful routing with Express.js
 - Using Mongoose for schema design and population
 - Middleware and route protection using Passport
@@ -48,7 +48,7 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 
 ## 🌐 Live Site
 
-👉 [https://zenthomes.onrender.com](https://zenthomes.onrender.com)
+👉 [https://zenthomes.onrender.com/listings](https://zenthomes.onrender.com)
 
 ---
 
