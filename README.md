@@ -48,7 +48,7 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 
 ## 🌐 Live Site
 
-👉 [https://zenthomes.onrender.com/listings](https://zenthomes.onrender.com)
+👉 [https://zenthomes.onrender.com/listings](https://zenthomes.onrender.come/listings)
 
 ---
 
