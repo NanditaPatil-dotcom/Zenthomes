@@ -6,7 +6,7 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 
 ## 🚀 Features
 
-- 🧭 **Geocoding**: Maps each listing to a physical location using Mapbox.
+- 🧭 **Geocoding**: Maps each listing to a physical location using Maptiler.
 - 🔐 **Authentication**: Users can register, login, and manage their listings using Passport.js.
 - 🗺️ **Interactive Map**: Listings are shown on an interactive map.
 - ✍️ **Reviews**: Users can leave reviews for listings.
