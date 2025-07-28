@@ -1,21 +1,21 @@
-# 🏡 Zenthomes
+#  Zenthomes
 
 Zenthomes is a full-stack web application inspired by Airbnb. It allows users to list properties, view listings, leave reviews, and authenticate securely using Passport.
 
 ---
 
-## 🚀 Features
+##  Features
 
-- 🧭 **Geocoding**: Maps each listing to a physical location using Maptiler.
-- 🔐 **Authentication**: Users can register, login, and manage their listings using Passport.js.
-- 🗺️ **Interactive Map**: Listings are shown on an interactive map.
-- ✍️ **Reviews**: Users can leave reviews for listings.
-- 🧠 **Search with Auto-Suggestions**: Dynamic search bar with smart suggestions using RegEx.
-- 🗂️ **Image Upload**: Upload and manage images using Cloudinary.
+-  **Geocoding**: Maps each listing to a physical location using Maptiler.
+-  **Authentication**: Users can register, login, and manage their listings using Passport.js.
+-  **Interactive Map**: Listings are shown on an interactive map.
+-  **Reviews**: Users can leave reviews for listings.
+-  **Search with Auto-Suggestions**: Dynamic search bar with smart suggestions using RegEx.
+-  **Image Upload**: Upload and manage images using Cloudinary.
 
 ---
 
-## 💡 What I Learned
+##  What I Learned
 
 - Integrating third-party APIs like Maptiler & Cloudinary
 - RESTful routing with Express.js
@@ -25,7 +25,7 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 
 ---
 
-## 🔧 Tech Stack
+##  Tech Stack
 
 - **Frontend**: EJS, Bootstrap, JavaScript
 - **Backend**: Node.js, Express.js
@@ -35,7 +35,7 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 <img width="1857" height="942" alt="image" src="https://github.com/user-attachments/assets/6c61d41a-cf5a-4423-95ae-372b7f60aebf" />
 <img width="940" height="761" alt="image" src="https://github.com/user-attachments/assets/e1f4744c-41f0-40b6-982a-7c6f61d47ee3" />
@@ -46,13 +46,13 @@ Zenthomes is a full-stack web application inspired by Airbnb. It allows users to
 
 ---
 
-## 🌐 Live Site
+##  Live Site
 
 👉 [https://zenthomes.onrender.com/listings](https://zenthomes.onrender.come/listings)
 
 ---
 
-## 🧙‍♀️ Author
+##  Author
 
 **Nandita Patil**  
 Engineering student | Coder  
